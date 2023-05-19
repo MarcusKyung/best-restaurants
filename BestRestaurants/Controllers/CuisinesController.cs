@@ -83,7 +83,20 @@ namespace BestRestaurants.Controllers
       Cuisine thisCuisine = _db.Cuisines
                                   .Include(cuisine => cuisine.Restaurants)
                                   .FirstOrDefault(cuisine => cuisine.Type == type);
-      return View(thisCuisine);
+                            
+      if (thisCuisine != null)
+      {
+        return View(thisCuisine);
+      }
+      else 
+      {
+        return RedirectToAction("NoResults");
+      }
+    }
+
+    public ActionResult NoResults()
+    {
+      return View();
     }
   }
 }

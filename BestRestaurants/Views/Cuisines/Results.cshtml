@@ -5,21 +5,18 @@
 @model BestRestaurants.Models.Cuisine
 @using BestRestaurants.Models
 
-<h2>Cuisine Details</h2>
+<h2>Search Results:</h2>
 <hr />
 <h3>@Html.DisplayNameFor(model => model.Type): @Html.DisplayFor(model => model.Type)<h3>
 
-@if (@Model.Restaurants.Count == 0)
-{
-  <h3>No restaurants have been added to this type of cuisine yet!</h3>
-} 
-else
-{
-  <h3>Restaurants:</h3>
-  <ul>
-    @foreach (Restaurant restaurant in Model.Restaurants)
-    {
-      <li>@Html.ActionLink($"{restaurant.Name}", "Details", "Restaurants", new { id = restaurant.RestaurantId })</li>
-    }
-  </ul>
-}
+
+<h3>Restaurants:</h3>
+<ul>
+  @foreach (Restaurant restaurant in Model.Restaurants)
+  {
+    <li>@Html.ActionLink($"{restaurant.Name}", "Details", "Restaurants", new { id = restaurant.RestaurantId })</li>
+  }
+</ul>
+<p>@Html.ActionLink("Add new cuisine", "Create")</p>
+<p>@Html.ActionLink("Add new Restaurant", "Create", "Restaurants")</p>
+<p>@Html.ActionLink("Home", "Index", "Home")</p>
