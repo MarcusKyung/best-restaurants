@@ -3,13 +3,35 @@
 }
 
 @model BestRestaurants.Models.Restaurant
+@using BestRestaurants.Models
 
 
 <h2>Restaurant Details</h2>
 <hr />
 <h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)<h3>
-<h3>@Html.DisplayNameFor(model => model.Cuisine): @Html.DisplayFor(model => model.Cuisine.Type)<h3>
 
-<p>@Html.ActionLink("Edit Item", "Edit", new { id = Model.RestaurantId })</p>
-<p>@Html.ActionLink("Delete Item", "Delete", new { id = Model.RestaurantId })</p>
+@if(@Model.JoinEntities.Count == 0)
+{
+  <p>This restaurant does not have any cuisines added yet!</p>
+}
+else
+{
+  <h4>This restaurant is represented by the following Cuisines:</h4>
+  <ul>
+    @foreach(CuisineRestaurant join in Model.JoinEntities)
+    {
+      <li>Cuisine: @join.Cuisine.Type</li>
+      @using (Html.BeginForm("DeleteJoin", "Restaurants"))
+      {
+        @Html.Hidden("restaurantId", Model.RestaurantId)
+        @Html.Hidden("joinId", @join.CuisineRestaurantId)
+        <input type="submit" value="Delete"/>
+      }
+    }
+  </ul>
+}
+
+<p>@Html.ActionLink("Edit Restaurant", "Edit", new { id = Model.RestaurantId })</p>
+<p>@Html.ActionLink("Delete Restaurant", "Delete", new { id = Model.RestaurantId })</p>
 <p>@Html.ActionLink("Back to list", "Index")</p>
+<p>@Html.ActionLink("Add a Cuisine", "AddCuisine", new { id = Model.RestaurantId })</p>

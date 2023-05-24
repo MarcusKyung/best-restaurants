@@ -5,6 +5,9 @@
 @model BestRestaurants.Models.Cuisine
 
 <h4>Add a new cuisine</h4>
+
+<p>@Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger", @style = "font-weight: 600;" })</p>
+
 @using (Html.BeginForm())
 {
   @Html.LabelFor(model => model.Type)

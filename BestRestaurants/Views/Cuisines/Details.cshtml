@@ -9,21 +9,28 @@
 <hr />
 <h3>@Html.DisplayNameFor(model => model.Type): @Html.DisplayFor(model => model.Type)<h3>
 
-@if (@Model.Restaurants.Count == 0)
+@if(@Model.JoinEntities.Count == 0)
 {
-  <h3>No restaurants have been added to this type of cuisine yet!</h3>
-} 
+  <p>This cuisine does not have any restaurants added yet!</p>
+}
 else
 {
-  <h3>Restaurants:</h3>
+  <h4>This cuisine is represented by the following restaurants:</h4>
   <ul>
-    @foreach (Restaurant restaurant in Model.Restaurants)
+    @foreach(CuisineRestaurant join in Model.JoinEntities)
     {
-      <li>@Html.ActionLink($"{restaurant.Name}", "Details", "Restaurants", new { id = restaurant.RestaurantId })</li>
+      <li>Restaurant: @join.Restaurant.Name</li>
+      @using (Html.BeginForm("DeleteJoin", "Cuisines"))
+      {
+        @Html.Hidden("cuisineId", Model.CuisineId)
+        @Html.Hidden("joinId", @join.CuisineRestaurantId)
+        <input type="submit" value="Delete"/>
+      }
     }
   </ul>
 }
 
+<p>@Html.ActionLink("Add a Restaurant", "AddRestaurant", new { id = Model.CuisineId })</p>
 <p>@Html.ActionLink("Edit Cuisine", "Edit", new { id = Model.CuisineId })</p>
 <p>@Html.ActionLink("Delete Cuisine", "Delete", new { id = Model.CuisineId })</p>
 <p>@Html.ActionLink("Back to list", "Index")</p>

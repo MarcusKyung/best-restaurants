@@ -19,17 +19,13 @@ namespace BestRestaurants.Controllers
 
     public ActionResult Index()
     {
-      List<Restaurant> model = _db.Restaurants
-                                  .Include(restaurant => restaurant.Cuisine)
-                                  .OrderBy(restaurant => restaurant.Cuisine.Type) //added code to order by ascending
-                                  .ToList();
+      List<Restaurant> model = _db.Restaurants.ToList();
       ViewBag.PageTitle = "View All Restaurants";                     
       return View(model);
     }
 
     public ActionResult Create()
-    {
-      ViewBag.CuisineId = new SelectList(_db.Cuisines, "CuisineId", "Type");
+    {  
       return View();
     }
 
@@ -37,19 +33,23 @@ namespace BestRestaurants.Controllers
     [HttpPost]
     public ActionResult Create(Restaurant restaurant)
     {
-      if (restaurant.CuisineId == 0)
+      if (!ModelState.IsValid)
       {
-        return RedirectToAction("Create");
+        return View(restaurant);
       }
+      else
+      {
       _db.Restaurants.Add(restaurant);
       _db.SaveChanges();
       return RedirectToAction("Index");
+      }
     }
 
     public ActionResult Details(int id)
     {
       Restaurant thisRestaurant = _db.Restaurants
-                                    .Include(restaurant => restaurant.Cuisine)
+                                    .Include(restaurant => restaurant.JoinEntities)
+                                    .ThenInclude(join => join.Cuisine)
                                     .FirstOrDefault(restaurant => restaurant.RestaurantId == id);
       return View(thisRestaurant);
     }
@@ -57,7 +57,6 @@ namespace BestRestaurants.Controllers
     public ActionResult Edit(int id)
     {
       Restaurant thisRestaurant = _db.Restaurants.FirstOrDefault(restaurant => restaurant.RestaurantId == id);
-      ViewBag.CuisineId = new SelectList(_db.Cuisines, "CuisineId", "Type");
       return View(thisRestaurant);
     }
 
@@ -82,6 +81,36 @@ namespace BestRestaurants.Controllers
       _db.Restaurants.Remove(thisRestaurant);
       _db.SaveChanges();
       return RedirectToAction("Index");
+    }
+
+    public ActionResult AddCuisine(int id)
+    {
+      Restaurant thisRestaurant = _db.Restaurants.FirstOrDefault(restaurants => restaurants.RestaurantId == id);
+      ViewBag.CuisineId = new SelectList(_db.Cuisines, "CuisineId", "Type");
+      return View(thisRestaurant);
+    }
+
+    [HttpPost]
+    public ActionResult AddCuisine(Restaurant restaurant, int cuisineId)
+    {
+      #nullable enable
+      CuisineRestaurant? joinEntity = _db.CuisineRestaurants.FirstOrDefault(join => (join.CuisineId == cuisineId && join.RestaurantId == restaurant.RestaurantId));
+      #nullable disable
+      if (joinEntity == null && cuisineId != 0)
+      {
+        _db.CuisineRestaurants.Add(new CuisineRestaurant () { CuisineId = cuisineId, RestaurantId = restaurant.RestaurantId });
+        _db.SaveChanges();
+      }
+      return RedirectToAction("Details", new { id = restaurant.RestaurantId });
+    }
+
+    [HttpPost]
+    public ActionResult DeleteJoin(int restaurantId, int joinId)
+    {
+      CuisineRestaurant joinEntry = _db.CuisineRestaurants.FirstOrDefault(entry => entry.CuisineRestaurantId == joinId);
+      _db.CuisineRestaurants.Remove(joinEntry);
+      _db.SaveChanges();
+      return RedirectToAction("Details", new {id = restaurantId});
     }
   }
 }
