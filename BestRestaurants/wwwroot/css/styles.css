@@ -3,9 +3,26 @@ div#footer {
 	bottom:0px;
 	left:0px;
 	width:100%;
-	color: pink;
-	background:#333;
+	color: white;
+	background: black;
 	padding:8px;
 	font-size: 15px;
-	background-image: url(restaurant.jpg);
+}
+
+.row{
+	width:100%;
+}
+
+div {
+	outline: red dashed 1px;
+}
+
+h4 {
+	outline: red dashed 1px;
+}
+
+.custom-card {
+	max-width: 75%; 
+	margin: 0 auto; 
+	margin-bottom: 0px; 
 }

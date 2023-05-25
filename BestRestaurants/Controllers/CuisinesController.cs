@@ -90,14 +90,18 @@ namespace BestRestaurants.Controllers
     [HttpPost]
     public ActionResult Results(string type)
     {
-      Cuisine thisCuisine = _db.Cuisines.FirstOrDefault(cuisine => cuisine.Type == type);
+      Cuisine thisCuisine = _db.Cuisines
+                              .Include(cuisine => cuisine.JoinEntities)
+                              .ThenInclude(join => join.Restaurant)
+                              .FirstOrDefault(cuisine => cuisine.Type == type);
+
       if (thisCuisine != null)
       {
-        return View(thisCuisine);
+          return View(thisCuisine);
       }
-      else 
+      else
       {
-        return RedirectToAction("NoResults");
+          return RedirectToAction("NoResults");
       }
     }
 

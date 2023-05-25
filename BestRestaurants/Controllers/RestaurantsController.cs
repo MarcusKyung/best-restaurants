@@ -19,7 +19,7 @@ namespace BestRestaurants.Controllers
 
     public ActionResult Index()
     {
-      List<Restaurant> model = _db.Restaurants.ToList();
+      List<Restaurant> model = _db.Restaurants.OrderBy(restaurant => restaurant.Name).ToList();
       ViewBag.PageTitle = "View All Restaurants";                     
       return View(model);
     }

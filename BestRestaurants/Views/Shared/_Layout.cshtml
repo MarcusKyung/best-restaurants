@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="~/css/styles.css">
   </head>
   <body>
+    @await Html.PartialAsync("nav")
     @RenderBody()
     @await Html.PartialAsync("footer")
-    <img src='@Url.Content("~/restaurant.jpg")' alt="a restaurant picture" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

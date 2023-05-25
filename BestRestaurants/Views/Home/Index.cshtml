@@ -1,35 +1,44 @@
 @{
-  Layout = "_Layout";
+    Layout = "_Layout";
 }
 
 @using BestRestaurants.Models;
 
 <h1>Welcome to the Best Restaurants App!</h1>
-    <img src="assets/restaurant2.jpg" alt="a restaurant picture" />
 
-<hr>
-<h4>Restaurants</h4>
-@if (Model["restaurants"].Length == 0)
-{
-  <p>No restaurants have been added yet!</p>
-}
-<ul>
-@foreach (Restaurant restaurant in Model["restaurants"])
-{
-  <li>@Html.ActionLink(@restaurant.Name, "Details", "Restaurants", new {id = @restaurant.RestaurantId})</li>
-}
-</ul>
-<h4>Cuisines</h4>
-@if (Model["cuisines"].Length == 0)
-{
-  <p>No cuisines have been added yet!</p>
-}
-<ul>
-@foreach (Cuisine cuisine in Model["cuisines"])
-{
-  <li>@Html.ActionLink(@cuisine.Type, "Details", "Cuisines", new {id = @cuisine.CuisineId})</li>
-}
-</ul>
-<hr>
-<p>@Html.ActionLink("See all restaurants", "Index", "Restaurants")</p>
-<p>@Html.ActionLink("See all cuisines", "Index", "Cuisines")</p>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card custom-card">
+            <div class="card-body">
+                <h4>Restaurants</h4>
+                @if (Model["restaurants"].Length == 0)
+                {
+                    <p>No restaurants have been added yet!</p>
+                }
+                <ul>
+                    @foreach (Restaurant restaurant in Model["restaurants"])
+                    {
+                        <li>@Html.ActionLink(@restaurant.Name, "Details", "Restaurants", new { id = @restaurant.RestaurantId })</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card custom-card">
+            <div class="card-body">
+                <h4>Cuisines</h4>
+                @if (Model["cuisines"].Length == 0)
+                {
+                    <p>No cuisines have been added yet!</p>
+                }
+                <ul>
+                    @foreach (Cuisine cuisine in Model["cuisines"])
+                    {
+                        <li>@Html.ActionLink(@cuisine.Type, "Details", "Cuisines", new { id = @cuisine.CuisineId })</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
